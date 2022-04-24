@@ -1,0 +1,254 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+public class SalesInformation extends JFrame
+{
+	JPanel left,menu,main,top;
+	JLabel leftheader;
+	JButton btn1,btn2,btn3,btn4,btn5,btn6,btn7;
+  public SalesInformation()
+  {
+	  Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+	  Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+	  Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+	  Font leftheaderfont=new Font("Serif",Font.BOLD,20);
+	  
+	  menu= new JPanel();
+	  menu.setBounds(10,10,100,80);
+	  menu.setLayout(null);
+	  menu.setBackground(Color.decode("#D07C4C"));
+	  menu.setBorder(raisedbevel);
+	  leftheader=new JLabel("Menu");
+	  leftheader.setBounds(25,20,50,40);
+	  leftheader.setFont(leftheaderfont);
+	  menu.add(leftheader);
+	  
+	  
+	  
+	  left=new JPanel();
+	  left.setBounds(10,100,100,370);
+	  left.setBackground(Color.decode("#46F717"));
+	  left.setLayout(null);
+	  left.setBorder(raisedbevel);
+	  
+	  btn1=new JButton("Today Menu");
+	  btn1.setBounds(10,20,80,30);
+	  btn1.setBorder(raisedetched);
+	  btn1.setBackground(Color.decode("#6F1E4E"));
+	  btn1.setForeground(Color.white);
+	  btn1.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			TodayMenu menu=new TodayMenu();
+			
+		}
+		  
+	  });
+	  
+	  
+	  btn2=new JButton("Add Item");
+	  btn2.setBounds(10,70,80,30);
+	  btn2.setBorder(raisedetched);
+	  btn2.setBackground(Color.decode("#6F1E4E"));
+	  btn2.setForeground(Color.white);
+	  btn2.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			AddItem item=new AddItem();
+			
+			
+		}
+		  
+	  });
+	  
+	  btn3=new JButton("Sale Product");
+	  btn3.setBounds(10,120,80,30);
+	  btn3.setBorder(raisedetched);
+	  btn3.setBackground(Color.decode("#6F1E4E"));
+	  btn3.setForeground(Color.white);
+	  btn3.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			dispose();
+			SaleProduct product=new SaleProduct();
+			
+		}
+		  
+	  });
+	  
+	  btn4=new JButton("Sales Info");
+	  btn4.setBounds(10,170,80,30);
+	  btn4.setBorder(raisedetched);
+	  btn4.setBackground(Color.decode("#6F1E4E"));
+	  btn4.setForeground(Color.white);
+	  btn4.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			SalesInformation inof=new SalesInformation();
+			
+		}
+		  
+	  });
+	  
+	  btn5=new JButton("Data Analysis");
+	  btn5.setBounds(10,220,80,30);
+	  btn5.setBorder(raisedetched);
+	  btn5.setBackground(Color.decode("#6F1E4E"));
+	  btn5.setForeground(Color.white);
+	  btn5.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			DataAnalysis an=new DataAnalysis();
+			
+		}
+		  
+	  });
+	  
+	  btn6=new JButton("Theme");
+	  btn6.setBounds(10,270,80,30);
+	  btn6.setBorder(raisedetched);
+	  btn6.setBackground(Color.decode("#6F1E4E"));
+	  btn6.setForeground(Color.white);
+	  
+	  btn7=new JButton("Cancel");
+	  btn7.setBounds(10,320,80,30);
+	  btn7.setBorder(raisedetched);
+	  btn7.setBackground(Color.decode("#6F1E4E"));
+	  btn7.setForeground(Color.white);
+	  btn7.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			System.exit(0);
+			
+		}
+		  
+	  });
+	  
+	  left.add(btn2);
+	  left.add(btn1);
+	  left.add(btn3);
+	  left.add(btn4);
+	  left.add(btn5);
+	  left.add(btn6);
+	  left.add(btn7);
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  main=new JPanel();
+	  main.setBounds(120,10,652,460);
+	  main.setBackground(Color.decode("#C1C1BA"));
+	  main.setLayout(null);
+	  main.setBorder(loweredbevel);
+	  
+	  mainheader=new JLabel("Shopped Data");
+	  mainheader.setBounds(210,5,200,40);
+	  Font mainfont=new Font("Serif",Font.BOLD,30);
+	  mainheader.setFont(mainfont);
+	  
+	  
+	   
+	 
+	   
+	   tableheader=new JPanel();
+	   tableheader.setLayout(null);
+	   tableheader.setBounds(17,50,615,40);
+	   tableheader.setBackground(Color.decode("#7EB1B6"));
+	   Font fun=new Font("Serif",Font.BOLD,15);
+	   
+	   JLabel labelsn=new JLabel("S.NO");
+	   labelsn.setBounds(15,12,40,15);
+	   labelsn.setFont(fun);
+	   
+	   JLabel labelitemno=new JLabel("Item No");
+	   labelitemno.setBounds(90,12,60,15);
+	   labelitemno.setFont(fun);
+	   
+	   JLabel labelitemname=new JLabel("Item Name");
+	   labelitemname.setBounds(180,12,80,15);
+	   labelitemname.setFont(fun);
+	   
+	   JLabel labelitemcategory=new JLabel("Category");
+	   labelitemcategory.setBounds(290,10,80,17);
+	   labelitemcategory.setFont(fun);
+	   
+	   JLabel labelitemprice=new JLabel("Price");
+	   labelitemprice.setBounds(400,12,40,15);
+	   labelitemprice.setFont(fun);
+	   
+	   JLabel labelitemquantity=new JLabel("Quantity");
+	   labelitemquantity.setBounds(474,10,60,18);
+	   labelitemquantity.setFont(fun);
+	   
+	   JLabel labelitemtotal=new JLabel("Total");
+	   labelitemtotal.setBounds(563,12,40,15);
+	   labelitemtotal.setFont(fun);
+	   
+	   tableheader.add(labelsn);
+	   tableheader.add(labelitemno);
+	   tableheader.add(labelitemname);
+	   tableheader.add(labelitemcategory);
+	   tableheader.add(labelitemprice);
+	   tableheader.add(labelitemquantity);
+	   tableheader.add(labelitemtotal);
+	   
+	   tablebody=new JPanel();
+	   tablebody.setBounds(17,90,615,240);
+	   tablebody.setBackground(Color.decode("#0A1CCD"));
+	   tablebody.setLayout(null);
+	   
+	   
+	   main.add(tableheader);
+	   main.add(tablebody);
+	  
+	  
+	  
+	  
+	  setTitle("Village Meat Suppliers");
+	  getContentPane().setBackground( Color.decode("#03A2EC") );
+	  setLayout(null);
+	  setVisible(true);
+	  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	  setResizable(false);
+	  setBounds(200,200,745,520);
+	  
+	  add(left);
+	  add(menu);
+	  add(main);
+  }
+  public static void main(String args[])
+  {
+	  SalesInformation info=new SalesInformation();
+  }
+}

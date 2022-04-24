@@ -1,0 +1,658 @@
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+
+public class SaleProduct extends JFrame
+{
+	JPanel left,menu,main;
+	JLabel leftheader,mainheader;
+	JButton btn1,btn2,btn3,btn4,btn5,btn6,btn7;
+	JPanel tablebody;
+	JPanel tableheader;
+	JPanel tabledata;
+  public SaleProduct()
+  {
+	  Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+	  Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+	  Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+	  Font leftheaderfont=new Font("Serif",Font.BOLD,20);
+	  
+	  menu= new JPanel();
+	  menu.setBounds(10,10,100,80);
+	  menu.setLayout(null);
+	  menu.setBackground(Color.decode("#D07C4C"));
+	  menu.setBorder(raisedbevel);
+	  leftheader=new JLabel("Menu");
+	  leftheader.setBounds(25,20,50,40);
+	  leftheader.setFont(leftheaderfont);
+	  menu.add(leftheader);
+	  
+	  
+	  
+	  left=new JPanel();
+	  left.setBounds(10,100,100,370);
+	  left.setBackground(Color.decode("#46F717"));
+	  left.setLayout(null);
+	  left.setBorder(raisedbevel);
+	  
+	  btn1=new JButton("Today Menu");
+	  btn1.setBounds(10,20,80,30);
+	  btn1.setBorder(raisedetched);
+	  btn1.setBackground(Color.decode("#6F1E4E"));
+	  btn1.setForeground(Color.white);
+	  btn1.addActionListener(new ActionListener() 
+	  {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			dispose();
+			TodayMenu menu=new TodayMenu();
+			
+		}
+		  
+	  });
+	  
+	  
+	  btn2=new JButton("Add Item");
+	  btn2.setBounds(10,70,80,30);
+	  btn2.setBorder(raisedetched);
+	  btn2.setBackground(Color.decode("#6F1E4E"));
+	  btn2.setForeground(Color.white);
+	  btn2.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			AddItem item=new AddItem();
+			
+			
+		}
+		  
+	  });
+	  
+	  btn3=new JButton("Sale Product");
+	  btn3.setBounds(10,120,80,30);
+	  btn3.setBorder(raisedetched);
+	  btn3.setBackground(Color.decode("#6F1E4E"));
+	  btn3.setForeground(Color.white);
+	  btn3.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			SaleProduct product=new SaleProduct();
+			
+		}
+		  
+	  });
+	  
+	  btn4=new JButton("Sales Info");
+	  btn4.setBounds(10,170,80,30);
+	  btn4.setBorder(raisedetched);
+	  btn4.setBackground(Color.decode("#6F1E4E"));
+	  btn4.setForeground(Color.white);
+	  btn4.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			SalesInformation info=new SalesInformation();
+			
+		}
+		  
+	  });
+	  
+	  btn5=new JButton("Data Analysis");
+	  btn5.setBounds(10,220,80,30);
+	  btn5.setBorder(raisedetched);
+	  btn5.setBackground(Color.decode("#6F1E4E"));
+	  btn5.setForeground(Color.white);
+	  btn5.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			dispose();
+			DataAnalysis ana=new DataAnalysis();
+			
+		}
+		  
+		  
+	  });
+	  
+	  btn6=new JButton("Theme");
+	  btn6.setBounds(10,270,80,30);
+	  btn6.setBorder(raisedetched);
+	  btn6.setBackground(Color.decode("#6F1E4E"));
+	  btn6.setForeground(Color.white);
+	  
+	  btn7=new JButton("Cancel");
+	  btn7.setBounds(10,320,80,30);
+	  btn7.setBorder(raisedetched);
+	  btn7.setBackground(Color.decode("#6F1E4E"));
+	  btn7.setForeground(Color.white);
+	  btn7.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			System.exit(0);
+			
+		}
+		  
+	  });
+	  
+	  left.add(btn2);
+	  left.add(btn1);
+	  left.add(btn3);
+	  left.add(btn4);
+	  left.add(btn5);
+	  left.add(btn6);
+	  left.add(btn7);
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  main=new JPanel();
+	  main.setBounds(120,10,652,460);
+	  main.setBackground(Color.decode("#C1C1BA"));
+	  main.setLayout(null);
+	  main.setBorder(loweredbevel);
+	  
+	  mainheader=new JLabel("Shopped Data");
+	  mainheader.setBounds(210,5,200,40);
+	  Font mainfont=new Font("Serif",Font.BOLD,30);
+	  mainheader.setFont(mainfont);
+	  
+	  
+	   
+	 
+	   
+	   tableheader=new JPanel();
+	   tableheader.setLayout(null);
+	   tableheader.setBounds(0,0,615,40);
+	   tableheader.setBackground(Color.decode("#7EB1B6"));
+	   Font fun=new Font("Serif",Font.BOLD,15);
+	   
+	   JLabel labelsn=new JLabel("S.NO");
+	   labelsn.setBounds(15,12,40,15);
+	   labelsn.setFont(fun);
+	   
+	   JLabel labelitemno=new JLabel("Item No");
+	   labelitemno.setBounds(90,12,60,15);
+	   labelitemno.setFont(fun);
+	   
+	   JLabel labelitemname=new JLabel("Item Name");
+	   labelitemname.setBounds(180,12,80,15);
+	   labelitemname.setFont(fun);
+	   
+	   JLabel labelitemcategory=new JLabel("Category");
+	   labelitemcategory.setBounds(290,10,80,17);
+	   labelitemcategory.setFont(fun);
+	   
+	   JLabel labelitemprice=new JLabel("Price");
+	   labelitemprice.setBounds(400,12,40,15);
+	   labelitemprice.setFont(fun);
+	   
+	   JLabel labelitemquantity=new JLabel("Quantity");
+	   labelitemquantity.setBounds(474,10,60,18);
+	   labelitemquantity.setFont(fun);
+	   
+	   JLabel labelitemtotal=new JLabel("Total");
+	   labelitemtotal.setBounds(563,12,40,15);
+	   labelitemtotal.setFont(fun);
+	   
+	   tableheader.add(labelsn);
+	   tableheader.add(labelitemno);
+	   tableheader.add(labelitemname);
+	   tableheader.add(labelitemcategory);
+	   tableheader.add(labelitemprice);
+	   tableheader.add(labelitemquantity);
+	   tableheader.add(labelitemtotal);
+	   
+	   tablebody=new JPanel();
+	   tablebody.setBounds(0,40,615,250);
+	   tablebody.setBackground(Color.decode("#0A1CCD"));
+	   tablebody.setLayout(null);
+	   
+	   
+	   main.add(tableheader);
+	   main.add(tablebody);
+	   
+	   
+	   
+	   JPanel bottompanel=new JPanel();
+	   bottompanel.setLayout(null);
+	   bottompanel.setBounds(20,340,615,110);
+	   bottompanel.setBackground(Color.cyan);
+	   
+	   
+	   JLabel itemcode=new JLabel("Item Code:");
+	   itemcode.setBounds(10,10,70,15);
+	   JLabel itemcodetext=new JLabel("101");
+	   itemcodetext.setBounds(90,10,100,15);
+	   
+	   JLabel itemname=new JLabel("Item Name:");
+	   itemname.setBounds(10,35,70,15);
+	   JLabel itemnametext=new JLabel("Pangra");
+	   itemnametext.setBounds(90,35,100,15);
+	   
+	   JLabel itemcategory=new JLabel("Category:");
+	   itemcategory.setBounds(12,60,70,15);
+	   JLabel categorytext=new JLabel("chicken");
+	   categorytext.setBounds(90,60,100,15);
+	   
+	   JLabel price=new JLabel("Price:");
+	   price.setBounds(18,85,70,15);
+	   JLabel pricetext=new JLabel("300");
+	   pricetext.setBounds(90,85,100,15);
+	   
+	   
+	   JLabel itemnameprocess=new JLabel("Item Name");
+	   itemnameprocess.setBounds(200,5,70,10);
+	   JTextField itemnameprocesstext=new JTextField();
+	   itemnameprocesstext.setBounds(200,20,400,20);
+	   itemnameprocesstext.setBorder(loweredbevel);
+	  itemnameprocesstext.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select * from item_information where item_name=?");
+				pst.setString(1, itemnameprocesstext.getText());
+				ResultSet rs=pst.executeQuery();
+				while(rs.next())
+				{
+					itemcodetext.setText(String.valueOf(rs.getInt(1)));
+					itemnametext.setText(rs.getString(2));
+					categorytext.setText(rs.getString(4));
+					pricetext.setText(String.valueOf(rs.getDouble(3)));
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0)
+		{
+			
+			
+		}
+		  
+	  });
+	   
+	   
+	   
+	   
+	   JLabel quantityprocess=new JLabel("Quantity");
+	   quantityprocess.setBounds(200,43,50,13);
+	   
+	   JTextField totalprocesstext=new JTextField();
+	   totalprocesstext.setBounds(320,60,110,20);
+	   totalprocesstext.setBorder(loweredbevel);
+	   
+	   JTextField quantityprocesstext=new JTextField();
+	   quantityprocesstext.setBounds(200,60,110,20);
+	   quantityprocesstext.setBorder(loweredbevel);
+	   quantityprocesstext.addKeyListener(new KeyListener()
+	   {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			double x=Double.parseDouble(quantityprocesstext.getText());
+			double y=Double.parseDouble(pricetext.getText());
+			double z=x*y;
+			totalprocesstext.setText(String.valueOf(z));
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	   
+	   
+	   
+	  
+	   JButton addtocart=new JButton("Add To Cart");
+	   addtocart.setBounds(440,50,160,30);
+	   addtocart.addActionListener(new ActionListener() 
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+		   try
+		   {
+			   Class.forName("oracle.jdbc.driver.OracleDriver");
+			   Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+			   PreparedStatement pst=conn.prepareStatement("insert into sale_information_duplicate values(?,?,?,?,?,?)");
+			   pst.setInt(1, Integer.parseInt(itemcodetext.getText()));
+			   pst.setString(2, itemnametext.getText());
+			   pst.setString(3, categorytext.getText());
+			   pst.setDouble(4, Double.parseDouble(pricetext.getText()));
+			   pst.setDouble(5, Double.parseDouble(quantityprocesstext.getText()));
+			   pst.setDouble(6, Double.parseDouble(totalprocesstext.getText()));
+			   
+			   int z=pst.executeUpdate();
+			   if(z>0)
+			   {
+				   JOptionPane.showMessageDialog(null, "Data inserted to duplicate database successfully");
+				   itemcodetext.setText("");
+				   categorytext.setText("");
+				   itemnametext.setText("");
+				   pricetext.setText("");
+				   quantityprocesstext.setText("");
+				   totalprocesstext.setText("");
+			   }
+		   }
+		   catch(Exception e)
+		   {
+			   e.printStackTrace();
+		   }
+		}
+		   
+	   });
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	   JButton process=new JButton("Process");
+	   process.setBounds(200,85,90,20);
+	   process.addActionListener(new ActionListener()
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			int id = 0;
+			String name = null,category=null;
+			double price = 0,total=0,quantity=0;
+			
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select * from sale_information_duplicate");
+				PreparedStatement pst2=con.prepareStatement("insert into sale_information_real values(?,?,?,?,?,?)");
+				ResultSet rs=pst.executeQuery();
+				while(rs.next())
+				{
+					id=rs.getInt(1);
+					name=rs.getString(2);
+					category=rs.getString(3);
+					price=rs.getDouble(4);
+					quantity=rs.getDouble(5);
+					total=rs.getDouble(6);
+					
+							
+				}
+				pst2.setInt(1, id);
+				pst2.setString(2, name);
+				pst2.setString(3, category);
+				pst2.setDouble(4, price);
+				pst2.setDouble(5, quantity);
+				pst2.setDouble(6, total);
+				int z=pst.executeUpdate();
+				if(z>0)
+				{
+					JOptionPane.showMessageDialog(null, "Data inserted to real database successfully" );
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+				}
+				
+				
+				
+			}
+			catch(Exception ev)
+			{
+				ev.printStackTrace();
+			}
+		}
+		   
+	   });
+	   
+	   JButton showall=new JButton("Show All");
+	   showall.setBounds(302,85,90,20);
+	   showall.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0)
+		{
+			 try
+			   {
+				   Class.forName("oracle.jdbc.driver.OracleDriver");
+				   Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				   PreparedStatement pst=conn.prepareStatement("select * from sale_information_duplicate");
+				   ResultSet rs=pst.executeQuery();
+				   int xdir=25,ydir=20;
+	               int x=1;
+				   while(rs.next())
+				   {
+					   
+					   Font fool=new Font("Serif",Font.BOLD,17);
+					   ItemModal modal=new ItemModal();
+					   modal.setItem_code(rs.getInt(1));
+					   modal.setItem_name(rs.getString(2));
+					   modal.setItem_price(rs.getDouble(4));
+					   modal.setItem_category(rs.getString(3));
+					   modal.setQuantity(rs.getDouble(5));
+					   modal.setTotal(rs.getDouble(6));
+					   
+					   JLabel labelforsn=new JLabel(String.valueOf(x));
+					   labelforsn.setBounds(xdir,ydir,20,20);
+					   labelforsn.setForeground(Color.white);
+					   labelforsn.setFont(fool);
+					   tablebody.add(labelforsn);
+					   xdir+=75;
+					   
+					   JLabel labelforcode=new JLabel(String.valueOf(modal.getItem_code()));
+					   labelforcode.setBounds(xdir,ydir,40,30);
+					   labelforcode.setForeground(Color.white);
+					   labelforcode.setFont(fool);
+					   tablebody.add(labelforcode);
+					   xdir+=80;
+				
+					   JLabel labelforname=new JLabel(modal.getItem_name());
+					   labelforname.setBounds(xdir,ydir,60,20);
+					   labelforname.setForeground(Color.white);
+					   labelforname.setFont(fool);
+					   tablebody.add(labelforname);
+					   xdir+=80;
+					   JLabel labelforcategory=new JLabel(modal.getItem_category());
+					   labelforcategory.setBounds(xdir,ydir,80,20);
+					   labelforcategory.setForeground(Color.white);
+					   labelforcategory.setFont(fool);
+					   tablebody.add(labelforcategory);
+					   xdir+=100;
+					   JLabel labelforprice=new JLabel(String.valueOf(modal.getItem_price()));
+					   labelforcategory.setBounds(xdir,ydir,40,20);
+					   labelforprice.setForeground(Color.white);
+					   labelforprice.setFont(fool);
+					   tablebody.add(labelforprice);
+					   xdir+=60;
+					   JLabel labelforquantity=new JLabel(String.valueOf(modal.getQuantity()));
+					   labelforquantity.setBounds(xdir,ydir,40,20);
+					   labelforquantity.setForeground(Color.white);
+					   labelforquantity.setFont(fool);
+					   tablebody.add(labelforquantity);
+					   xdir+=60;
+					   JLabel labelfortotal=new JLabel(String.valueOf(modal.getTotal()));
+					   labelfortotal.setBounds(xdir,ydir,60,20);
+					   labelfortotal.setForeground(Color.white);
+					   labelfortotal.setFont(fool);
+					   tablebody.add(labelfortotal);
+					   
+					   ydir+=70;
+					   x++;
+					   xdir=20;
+					   
+					   
+					  
+					 
+				   }
+			   }
+			   catch(Exception e)
+			   {
+				   e.printStackTrace();
+			   }
+		}
+		   
+	   });
+	   
+	   
+	   
+	   JButton clear=new JButton("Clear");
+	   clear.setBounds(407,85,90,20);
+	   clear.addActionListener(new ActionListener() 
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+	
+			 try
+			   {
+				   Class.forName("oracle.jdbc.driver.OracleDriver");
+				   Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				   PreparedStatement pst=conn.prepareStatement("delete from sale_information_duplicate");
+				   int x=pst.executeUpdate();
+				   if(x>0)
+				   {
+					   itemcodetext.setText("");
+					   categorytext.setText("");
+					   itemnametext.setText("");
+					   pricetext.setText("");
+					   quantityprocesstext.setText("");
+					   totalprocesstext.setText("");
+					   JOptionPane.showMessageDialog(null, "Data Deleted Successfully");
+				   }
+				  
+				 
+			   }
+			   catch(Exception ec)
+			   {
+				   ec.printStackTrace();
+			   }
+		}
+		   
+	   });
+	   JButton cancel=new JButton("Cancel");
+	   cancel.setBounds(512,85,90,20);
+	   cancel.addActionListener(new ActionListener()
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			System.exit(0);
+		}
+		   
+	   });
+	   
+	   
+	   
+	   
+	   bottompanel.add(itemcode);
+	   bottompanel.add(itemname);
+	   bottompanel.add(itemcategory);
+	   bottompanel.add(price);
+	   bottompanel.add(itemcodetext);
+	   bottompanel.add(itemnametext);
+	   bottompanel.add(pricetext);
+	   bottompanel.add(categorytext);
+	   bottompanel.add(itemnameprocesstext);
+	   bottompanel.add(itemnameprocess);
+	   bottompanel.add(quantityprocess);
+	   bottompanel.add(quantityprocesstext);
+	   bottompanel.add(totalprocesstext);
+	   bottompanel.add(addtocart);
+	   bottompanel.add(showall);
+	   bottompanel.add(cancel);
+	   bottompanel.add(clear);
+	   bottompanel.add(process);
+	   
+	  
+	  main.add(mainheader);
+	  main.add(bottompanel);
+	  
+	  
+	  
+	  
+	  setTitle("Village Meat Suppliers");
+	  getContentPane().setBackground( Color.decode("#03A2EC") );
+	  setLayout(null);
+	  setVisible(true);
+	  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	  setResizable(false);
+	  setBounds(200,200,800,520);
+	  
+	  add(left);
+	  add(menu);
+	  add(main);
+  }
+  public static void main(String args[])
+  {
+	  SaleProduct product=new SaleProduct();
+  }
+}

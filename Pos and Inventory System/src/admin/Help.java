@@ -1,0 +1,407 @@
+package admin;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Calendar;
+
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+import home.Login;
+
+public class Help extends JFrame
+{
+    public Help(String name)
+    {
+      Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+   	  Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+   	  Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+   	  
+   	  JPanel menu=new JPanel();
+   	  menu.setBounds(5,5,200,80);
+   	  menu.setBorder(raisedbevel);
+   	  menu.setLayout(null);
+   	  
+   	  JLabel leftheader=new JLabel("MAIN MENU");
+   	  Font font=new Font(Font.SANS_SERIF,Font.PLAIN,20);
+   	  leftheader.setBounds(44,32,112,15);
+   	  leftheader.setFont(font);
+   	  menu.add(leftheader);
+   	  
+   	  
+   	  JPanel left=new JPanel();
+   	  left.setBounds(5,100,200,565);
+   	  left.setBorder(raisedetched);
+   	  left.setLayout(null);
+   	  
+   	  
+   	  
+	  JButton inventory=new JButton("Inventory");
+   	  inventory.setBounds(20,30,160,40);
+   	  inventory.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0)
+   		{
+   			AdminPanel panel=new AdminPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton customer=new JButton("Customer");
+   	  customer.setBounds(20, 90, 160, 40);
+   	  customer.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			CustomerPanel panel=new CustomerPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton account=new JButton("Account");
+   	  account.setBounds(20,150,160,40);
+   	  account.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e) 
+   		{
+   			AccountPanel panel=new AccountPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton sales=new JButton("Sales");
+   	  sales.setBounds(20,210,160,40);
+   	  sales.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			SalesReport panel=new SalesReport(name);
+   			
+   		}
+   		  
+   	  });
+   	  
+   	  JButton customer_sales=new JButton("Customer Sales");
+   	  customer_sales.setBounds(20,270,160,40);
+   	  customer_sales.addActionListener(new ActionListener()
+   	  {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			CustomerSalesPanel panel=new CustomerSalesPanel(name);
+		}
+   		  
+   	  });
+   	  JButton changeuser=new JButton("Change User");
+   	  changeuser.setBounds(20, 330, 160, 40);
+   	  changeuser.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e) 
+   		{
+   			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Admin "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+   			Login login=new Login();
+   			dispose();
+   			
+   		}
+   		  
+   	  });
+   	  JButton exit=new JButton("Exit");
+   	  exit.setBounds(20,390,160,40);
+   	  exit.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Admin "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+   			System.exit(0);
+   		}
+   		  
+   	  });
+   	 JPanel pannel=new JPanel();
+	  pannel.setLayout(null);
+	  pannel.setBorder(raisedbevel);
+	  pannel.setBounds(20,460,160,80);
+	  
+	  JLabel Title=new JLabel("Logged In User Info");
+	  Title.setBounds(25,20,140,20);
+	  JLabel title_value=new JLabel();
+	  title_value.setBounds(50,40,60,20);
+	  title_value.setText(name);
+	  pannel.add(title_value);
+	  pannel.add(Title);
+	  
+	  left.add(pannel);
+   	  
+   	  left.add(inventory);
+   	  left.add(customer);
+   	  left.add(account);
+   	  left.add(sales);
+   	  left.add(changeuser);
+   	  left.add(exit);
+   	  left.add(customer_sales);
+   	 
+   	  
+   	  
+   	  
+   	  
+   	  JPanel top=new JPanel();
+   	  top.setBounds(210,0,970,140);
+   	  top.setBackground(Color.black);
+   	  top.setBorder(loweredbevel);
+   	  top.setLayout(null);
+   	  
+   	  JButton newitem = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//add item.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newitem.setBounds(80,10,140,120);
+   	  newitem.setText("New Item");
+   	  newitem.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newitem.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newitem.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewItem item=new NewItem(name);
+   			dispose();
+   			
+   		}
+   		  
+   	  });
+   	  
+   	  JButton newcustomer = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new customer.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newcustomer.setBounds(249,10,140,120);
+   	  newcustomer.setText("New Customer");
+   	  newcustomer.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newcustomer.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newcustomer.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewCustomer customer=new NewCustomer(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	
+   	  JButton newemployee = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new employee.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newemployee.setBounds(418,10,140,120);
+   	  newemployee.setText("New Employee");
+   	  newemployee.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newemployee.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newemployee.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewEmployee emp=new NewEmployee(name);
+   		}
+   		  
+   	  });
+
+   	  JButton logs = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//logs.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  logs.setBounds(587,10,140,120);
+   	  logs.setText("Logs");
+   	  logs.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  logs.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  logs.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			Logs log=new Logs(name);
+   			
+   		}
+   		  
+   	  });
+   	
+   	  JButton help = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//help.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  help.setBounds(756,10,140,120);
+   	  help.setText("Help");
+   	  help.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  help.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  help.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			Help help=new Help(name);
+   			dispose();
+   		}
+   		  
+   	  });
+
+   	  top.add(newitem);
+   	  top.add(newcustomer);
+   	  top.add(newemployee);
+   	  top.add(logs);
+   	  top.add(help);
+   	  
+   	  
+   	  
+   	  JPanel middle=new JPanel();
+   	  middle.setBounds(210,150,970,515);
+   	  middle.setBorder(raisedbevel);
+   	  middle.setBackground(Color.BLACK);
+   	  middle.setLayout(null);
+   	  
+   	 JButton panel1 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (36).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel1.setBounds(20,15,297,151);
+   	 
+   	 JButton panel2 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (37).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	  panel2.setBounds(337,15,297,151);
+   	  
+   	 JButton panel3 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (38).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	  panel3.setBounds(654,15,297,151);
+   	  
+   	 JButton panel4 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (39).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel4.setBounds(20,181,297,151);
+   	 
+   	 JButton panel5 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (40).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel5.setBounds(337,181,297,151);
+   	 
+   	 JButton panel6 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (45).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel6.setBounds(654,181,297,151);
+   	 
+   	 JButton panel7 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (42).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel7.setBounds(20,352,297,151);
+   	 
+   	 JButton panel8 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (43).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel8.setBounds(337,352,297,151);
+   	 
+   	 JButton panel9 = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//Screenshot (44).png")).getImage()).getScaledInstance(297, 151, java.awt.Image.SCALE_SMOOTH)));
+   	 panel9.setBounds(654,352,297,151);
+   	 middle.add(panel1);
+   	  middle.add(panel2);
+   	  middle.add(panel3);
+   	  middle.add(panel4);
+   	  middle.add(panel5);
+   	  middle.add(panel6);
+   	  middle.add(panel9);
+   	  middle.add(panel8);
+   	  middle.add(panel7);
+   	  
+   	 setBounds(20,20,1192,700);
+	  setTitle("Lamichhane Inventory Management");
+	  setVisible(true);
+	  setDefaultCloseOperation(EXIT_ON_CLOSE);
+	  setVisible(true);
+	  setLayout(null);
+	  setResizable(false);
+	  this.addWindowListener(new WindowListener(){
+
+		@Override
+		public void windowActivated(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent arg0) {
+			
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  add(menu);
+	  add(left);
+	  add(top);
+	  add(middle);
+    }
+    public static void main(String args[])
+    {
+    	Help help=new Help(null);
+    }
+}

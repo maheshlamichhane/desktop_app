@@ -1,0 +1,1032 @@
+package quality.book.publication.employee;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.awt.event.WindowListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.PrinterJob;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+
+
+import quality.book.publication.home.Login;
+import net.proteanit.sql.DbUtils;
+
+public class EmployeePanel extends JFrame
+{
+	
+	 public PageFormat getPageFormat(PrinterJob pj)
+	    {
+	        PageFormat pf=pj.defaultPage();
+	        Paper paper=pf.getPaper();
+	        double middleHeight=8.0;
+	        double headerHeight=2.0;
+	        double footerHeight=2.0;
+	        double width=convert_CM_To_PPT(12);
+	        double height=convert_CM_To_PPT(headerHeight+middleHeight+footerHeight);
+	        paper.setSize(width,height);
+	        paper.setImageableArea(
+	        0,
+	        10,
+	        width,
+	        height-convert_CM_To_PPT(1)
+	        );
+	        pf.setOrientation(PageFormat.PORTRAIT);
+	        pf.setPaper(paper);
+	        return pf;
+	    }
+	       
+	        protected static double convert_CM_To_PPT(double dd)
+	    {
+	        return toPPT(dd*0.393600787);
+	    }
+	    protected static double toPPT(double inch)
+	    {
+	        return inch*72d;
+	    }
+	
+		public String GenerateInvoiceNumber()
+		{
+			String id=null;
+			
+				
+				try
+				{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+			    PreparedStatement pts=con.prepareStatement("select max(bill_no) from customer_transaction_table");
+				ResultSet ps=pts.executeQuery();
+				while(ps.next())
+				{
+				
+					id=ps.getString(1);
+				}
+				
+				if(id.equals("null"))
+				{
+					id="E-0000001";
+				}
+				else
+				{
+				   long val=Long.parseLong(id.substring(3));
+				   val++;
+				   id= "E-"+String.valueOf(String.format("%07d", val));
+			
+				
+				 
+				}
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			  return id;
+			
+				
+			
+		}
+   public EmployeePanel(String name)
+   {
+	   JPanel top_info=new JPanel();
+	   top_info.setLayout(null);
+	   top_info.setBounds(20,10,1040,20);
+	   top_info.setBackground(Color.red);
+	   JLabel user=new JLabel("User:");
+	   user.setBounds(10,0,30,20);
+	   JLabel user_info=new JLabel();
+	   user_info.setBounds(50,0,40,20);
+	   user_info.setText(name);
+	   user_info.setForeground(Color.white);
+	   JLabel user_name=new JLabel("Cashier");
+	   user_name.setBounds(100,0,80,20);
+	   top_info.add(user);
+	   top_info.add(user_info);
+	   top_info.add(user_name);
+	   
+	   JPanel navigation=new JPanel();
+	   navigation.setLayout(null);
+	   navigation.setBounds(20,40,1040,60);
+	   navigation.setBackground(Color.green);
+	   
+	   JButton inventory=new JButton("Inventory");
+	   inventory.setBounds(50,10,90,40);
+	   inventory.addActionListener(new ActionListener()
+	   {
+		   public void actionPerformed(ActionEvent e)
+		   {
+			   dispose();
+			   CashierInventory inven=new CashierInventory(name);
+		   }
+	   });
+	   JButton changeuser=new JButton("Change User");
+	   changeuser.setBounds(170,10,110,40);
+	   changeuser.addActionListener(new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Cashier "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			dispose();
+			Login login=new Login();
+			
+		}
+		   
+	   });
+	   
+	   
+	   JButton exit=new JButton("Exit");
+	   exit.setBounds(310,10,80,40);
+	   exit.addActionListener(new ActionListener()
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Cashier "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			System.exit(0);
+		}
+		   
+	   });
+	   JLabel todaydate=new JLabel();
+	   todaydate.setBounds(960,20,80,20);
+	   todaydate.setText(java.time.LocalDate.now().toString());
+	   
+	   navigation.add(todaydate);
+	   navigation.add(exit);
+	   navigation.add(changeuser);
+	   navigation.add(inventory);
+	   
+	   JPanel status=new JPanel();
+	   status.setLayout(null);
+	   status.setBounds(20,110,1040,40);
+	   status.setBackground(Color.BLACK);
+	   JLabel cashier=new JLabel("Cashier:Feter");
+	   cashier.setBounds(20,5,100,30);
+	   cashier.setForeground(Color.white);
+	   JLabel caption=new JLabel("Amount Due:");
+	   caption.setBounds(820,5,80,30);
+	   caption.setForeground(Color.white);
+	   JLabel amountdue=new JLabel();
+	   amountdue.setBounds(930,5,60,30);
+	   amountdue.setForeground(Color.WHITE);
+	   amountdue.setText("0");
+	   status.add(amountdue);
+	   status.add(cashier);
+	   status.add(caption);
+	   JPanel tabledata=new JPanel();
+	   tabledata.setBounds(20,160,1040,280);
+	   tabledata.setBackground(Color.ORANGE);
+	   tabledata.setLayout(null);
+	   String[][] rows={{"03/27/17","21082","hollowblock","5,65","50","282.5"},
+			             {"18/12.16","45847","rj-45","5.0","50","250.0"}
+	   };
+	   String[] header={"DATE/TIME","ITEM CODE","ITEM NAME","PRICE","QUANTITY","TOTAL"};
+	   JTable data=new JTable(rows,header);
+	   JScrollPane pane=new JScrollPane(data);
+	   pane.setBounds(0,0,1040,280);
+	   Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+	   tabledata.setBorder(loweredbevel);
+	   tabledata.add(pane);
+	   
+	   
+	   JPanel bottom=new JPanel();
+	   bottom.setBounds(20,450,1040,180);
+	   bottom.setLayout(null);
+	   bottom.setBackground(Color.cyan);
+	   
+	   JPanel maindetail=new JPanel();
+	   maindetail.setBounds(10,0,260,180);
+	   maindetail.setLayout(null);
+	   maindetail.setBackground(Color.BLUE);
+	  
+	   JLabel customer_header=new JLabel("Customer Information");
+	   customer_header.setBounds(30,20,200,15);
+	   Font fus=new Font(Font.SERIF,Font.BOLD,20);
+	   customer_header.setFont(fus);
+	   
+	   JLabel customer_name=new JLabel("Customer Name:");
+	   customer_name.setBounds(5,70,100,10);
+	   
+	   JTextField customer_name_value=new JTextField();
+	   customer_name_value.setBounds(120,65,135,25);
+	   customer_name_value.addFocusListener(new FocusListener(){
+
+		@Override
+		public void focusGained(FocusEvent arg0)
+		{
+			customer_name_value.setBackground(Color.white);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	   
+	   JLabel customer_phone=new JLabel("Phone Number:");
+	   customer_phone.setBounds(5,100,100,10);
+	   
+	   JTextField customer_phone_field=new JTextField();
+	   customer_phone_field.setBounds(120,95,135,25);
+	   customer_phone_field.addFocusListener(new FocusListener(){
+
+		@Override
+		public void focusGained(FocusEvent e) 
+		{
+			customer_phone_field.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	   
+	   JLabel transtypelabel=new JLabel("Transaction Type:");
+	   transtypelabel.setBounds(5,130,105,15);
+	   
+	   
+	   String trans[]={"Select Transaction","Cash","Credit","Random","Deposit"};
+	   JComboBox transtype=new JComboBox(trans);
+	   transtype.setBounds(120,125,135,25);
+	   
+	   maindetail.add(customer_header);
+	   maindetail.add(customer_name);
+	   maindetail.add(customer_name_value);
+	   maindetail.add(customer_phone);
+	   maindetail.add(customer_phone_field);
+	   maindetail.add(transtypelabel);
+	   maindetail.add(transtype);
+	   
+	   
+	   JPanel bottom_left=new JPanel();
+	   bottom_left.setBounds(280,0,240,180);
+	   bottom_left.setBackground(Color.pink);
+	   bottom_left.setLayout(null);
+	   
+	   JLabel item_code=new JLabel("Item Code:");
+	   item_code.setBounds(30,20,85,20);
+	 
+	
+	   JLabel item_name=new JLabel("Item Name:");
+	   item_name.setBounds(30,50,85,20);
+	   JLabel description=new JLabel("Description:");
+	   description.setBounds(30,80,85,20);
+	   JLabel category=new JLabel("Category:");
+	   category.setBounds(30,110,85,20);
+	   JLabel price=new JLabel("Price:");
+	   price.setBounds(30,140,85,20);
+	   
+	   JLabel item_code_value=new JLabel("21082");
+	   item_code_value.setBounds(130,25,85,10);
+	   JLabel item_name_value=new JLabel("hollowblock");
+	   item_name_value.setBounds(130,55,85,10);
+	   JLabel description_value=new JLabel("400*150*200");
+	   description_value.setBounds(130,85,100,10);
+	   JLabel category_value=new JLabel("HollowBlocks");
+	   category_value.setBounds(130,115,85,10);
+	   JLabel price_value=new JLabel("5.55");
+	   price_value.setBounds(130,145,85,10);
+	   
+	   bottom_left.add(item_code);
+	   bottom_left.add(item_name);
+	   bottom_left.add(description);
+	   bottom_left.add(category);
+	   bottom_left.add(price);
+	   bottom_left.add(item_code_value);
+	   bottom_left.add(item_name_value);
+	   bottom_left.add(description_value);
+	   bottom_left.add(category_value);
+	   bottom_left.add(price_value);
+	   
+	   
+	   
+	  
+	 
+	   
+	   JPanel bottom_right=new JPanel();
+	   bottom_right.setBounds(525,0,515,180);
+	   bottom_right.setBackground(Color.MAGENTA);
+	   bottom_right.setLayout(null);
+	   
+	   
+	   JLabel item_name_right=new JLabel("Item Name");
+	   item_name_right.setBounds(10,20,70,15);
+	   JTextField item_name_textbox=new JTextField();
+	   item_name_textbox.setBounds(10,40,495,30);
+	   item_name_textbox.setBorder(loweredbevel);
+	   item_name_textbox.addKeyListener(new KeyListener()
+	   {
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) 
+		{
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select * from item_info where item_name=?");
+				pst.setString(1, item_name_textbox.getText());
+				ResultSet rs=pst.executeQuery();
+				while(rs.next())
+				{
+					item_code_value.setText(String.valueOf(rs.getInt(1)));
+					item_name_value.setText(rs.getString(2));
+					description_value.setText(rs.getString(3));
+					category_value.setText(rs.getString(4));
+					price_value.setText(String.valueOf(rs.getInt(5)));
+					
+				}
+			}
+			catch(Exception ep)
+			{
+				ep.printStackTrace();
+			}
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	   JTextField total_textbox=new JTextField();
+	   total_textbox.setBounds(150,95,120,25);
+	   total_textbox.setBorder(loweredbevel);
+	   JLabel quantity_label=new JLabel("Quantity");
+	   quantity_label.setBounds(10,75,50,15);
+	   JLabel total_label=new JLabel();
+	   total_label.setBounds(150,75,50,15);
+	   JTextField quantity_textbox=new JTextField();
+	   quantity_textbox.setBounds(10,95,120,25);
+	   quantity_textbox.setBorder(loweredbevel);
+	   quantity_textbox.addKeyListener(new KeyListener(){
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) 
+		{
+			if(category_value.getText().equals("masu"))
+			{
+				double x=Double.parseDouble(price_value.getText());
+				double result=Double.parseDouble(quantity_textbox.getText());
+				double total=x*result;
+				total_textbox.setText(String.valueOf(total));
+			}
+			else
+			{
+			Double price=Double.parseDouble(price_value.getText());
+			Double quantity=Double.parseDouble(quantity_textbox.getText());
+			Double total=price*quantity;
+			total_textbox.setText(Double.toString(total));
+			}
+			
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	 
+	   JButton add_to_cart=new JButton("Add To Cart");
+	   add_to_cart.setBounds(280,80,225,40);
+	   add_to_cart.addActionListener(new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime()); // your sql date
+			
+			 
+			 int y=0,v=0;
+            
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pop=con.prepareStatement("select stocks from item_info where item_code=?");
+				pop.setInt(1, Integer.parseInt(item_code_value.getText()));
+				ResultSet rss=pop.executeQuery();
+				int oxo = 0;
+				while(rss.next())
+				{
+					oxo=rss.getInt(1);
+				}
+				if(oxo>Integer.parseInt(quantity_textbox.getText()))
+				{
+					
+					PreparedStatement pst3=con.prepareStatement("insert into sales_information_duplicate values(?,?,?,?,?,?)");
+					pst3.setDate(1,  sqlDate);
+					pst3.setInt(2, Integer.parseInt(item_code_value.getText()));
+					pst3.setString(3, item_name_value.getText());
+					pst3.setDouble(4, Double.parseDouble(price_value.getText()));
+					pst3.setInt(5, Integer.parseInt(quantity_textbox.getText()));
+					pst3.setDouble(6, Double.parseDouble(total_textbox.getText()));
+					y=pst3.executeUpdate();
+					
+					PreparedStatement pst4=con.prepareStatement("select sum(total) from sales_information_duplicate");
+					ResultSet pq=pst4.executeQuery();
+					while(pq.next())
+					{
+						amountdue.setText(String.valueOf(pq.getInt(1)));
+					}
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Item Out Of Stock Only "+oxo+" Remaining");
+				}
+				PreparedStatement pstuy=con.prepareStatement("insert into employee_log_data values(?,?,?)");
+				pstuy.setDate(1,sqlDate);
+				pstuy.setString(2, name);
+				pstuy.setString(3, " "+name+" sell "+item_name_textbox.getText()+" ");
+				v=pstuy.executeUpdate();
+				
+				
+				
+				
+				
+			if(y>0 && v>0)
+				{
+					JOptionPane.showMessageDialog(null, "Successfully Inserted To Duplicate Database");
+					item_code_value.setText("");
+					item_name_value.setText("");
+					description_value.setText("");
+					category_value.setText("");
+					price_value.setText("");
+					quantity_textbox.setText("");
+					total_textbox.setText("");
+					item_name_textbox.setText("");
+					
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+				}
+		
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		   
+	   });
+	   JButton showall=new JButton("Show All");
+	   showall.setBounds(137,130,110,40);
+	   showall.addActionListener(new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select * from sales_information_duplicate");
+				PreparedStatement pst1=con.prepareStatement("select sum(total) total_value from sales_information_duplicate");
+				ResultSet rs2=pst1.executeQuery();
+				while(rs2.next())
+				{
+					amountdue.setText(rs2.getString(1));
+				}
+				ResultSet rs=pst.executeQuery();
+				data.setModel(DbUtils.resultSetToTableModel(rs));
+				rs.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		   
+	   });
+	   JButton clear=new JButton("Clear");
+	   clear.setBounds(264,130,110,40);
+	   clear.addActionListener(new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			item_code_value.setText("");
+			item_name_value.setText("");
+			description_value.setText("");
+			category_value.setText("");
+			price_value.setText("");
+			quantity_textbox.setText("");
+			total_textbox.setText("");
+			item_name_textbox.setText("");
+			
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("delete from sales_information_duplicate");
+				int z=pst.executeUpdate();
+				if(z>0)
+				{
+					JOptionPane.showMessageDialog(null, "All Data Cleared");
+					
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+				}
+				con.close();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		   
+	   });
+	   JButton cancel=new JButton("Cancel");
+	   cancel.setBounds(391,130,112,40);
+	   cancel.addActionListener(new ActionListener(){
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			System.exit(0);
+			
+		}
+		   
+	   });
+	   JButton process=new JButton("Process");
+	   process.setBounds(10,130,110,40);
+	   process.addActionListener(new ActionListener()
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			String phone_number=customer_phone_field.getText();
+			String name=customer_name_value.getText();
+			String Transaction_Type=transtype.getSelectedItem().toString();
+			
+			if(Transaction_Type.equals("Select Transaction"))
+			{
+				JOptionPane.showMessageDialog(null, "Please Choose Transaction Type");
+			}
+			
+			
+			
+			if(Transaction_Type.equals("Credit"))
+			{
+				if(name.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill customer name field");
+					customer_name_value.setBackground(Color.RED);
+				}
+				else if(phone_number.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill phone number field");
+					customer_phone_field.setBackground(Color.RED);
+				}
+			
+			
+				else
+				{
+				
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("select contact_number,customer_name from customer_information");
+				    ResultSet rs=pst.executeQuery();
+				    int v=0;
+					while(rs.next())
+					{
+						if(rs.getInt(1)==(Integer.valueOf(phone_number)) && rs.getString(2).equals(name))
+						{
+							v=1;
+						}
+				
+						
+					}
+					if(v==0)
+					{
+						JOptionPane.showMessageDialog(null, "This Customer not Exists In System");
+					}
+					else
+					{
+						java.util.Calendar cal = Calendar.getInstance();
+						java.util.Date utilDate = new java.util.Date(); // your util date
+						cal.setTime(utilDate);    
+						java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+						int x=0,z=0,f=0;
+						double sum=0;
+						String val=null;
+						ArrayList<Model> list=new ArrayList<Model>();
+						
+						try
+						{
+						
+							Class.forName("oracle.jdbc.driver.OracleDriver");
+							Connection cong=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+							PreparedStatement pstb=cong.prepareStatement("insert into sales_information_real values(?,?,?,?,?,?)");
+							PreparedStatement pstx=con.prepareStatement("select * from sales_information_duplicate");
+						
+						
+							
+							
+							
+							ResultSet op=pstx.executeQuery();
+							while(op.next())
+							{
+								Model m=new Model();
+							m.setMydate(op.getDate(1));
+							m.setItem_code(op.getInt(2));
+							m.setItem_name(op.getString(3));
+							m.setPrice(op.getDouble(4));
+							m.setQuantity(op.getInt(5));
+						    m.setTotal(op.getDouble(6));
+						    sum+=op.getDouble(6);
+							list.add(m);
+							
+							}
+							
+							for(Model m:list)
+							{
+								pstb.setDate(1, m.getMydate());
+								pstb.setInt(2, m.getItem_code());
+								pstb.setString(3, m.getItem_name());
+								pstb.setDouble(4, m.getPrice());
+								pstb.setInt(5, m.getQuantity());
+								pstb.setDouble(6, m.getTotal());
+								x=pstb.executeUpdate();
+							}
+							
+							for(Model m:list)
+							{
+								PreparedStatement pst2=con.prepareStatement("update item_info set stocks=stocks-"+m.getQuantity()+" where item_code=?");
+								pst2.setInt(1, m.getItem_code());
+								z=pst2.executeUpdate();
+							}
+							
+							val=GenerateInvoiceNumber();
+							
+							
+							
+							PreparedStatement pos=con.prepareStatement("insert into customer_transaction_table values(?,?,?,?,?,?,?)");
+							pos.setDate(1, sqlDate);
+							pos.setString(2,name);
+							pos.setInt(3,Integer.parseInt(phone_number));
+							pos.setString(4, val);
+							pos.setString(5, "Sale Bill:SI/"+val);
+							pos.setString(6, "Credit");
+							pos.setDouble(7, sum);
+							f=pos.executeUpdate();
+							
+							
+				          
+							
+							
+							
+							
+						
+							
+						
+							
+						
+						}
+						catch(Exception ez)
+						{
+							ez.printStackTrace();
+						}
+						
+						if(x>0 && z>0 && f>0)
+						{
+						    JOptionPane.showMessageDialog(null,"Data are added Successfylly to the database");
+						    customer_name_value.setText("");
+						    customer_phone_field.setText("");
+						    transtype.setSelectedIndex(0);
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+						}
+						
+						JOptionPane.showMessageDialog(null, "Thank You");
+						
+				         PrinterJob pj=PrinterJob.getPrinterJob();
+				         pj.setPrintable(new BillPrintable(phone_number,name,Transaction_Type,val),getPageFormat(pj));
+				         try
+				         {
+				             pj.print();
+				         }
+				         catch(Exception t)
+				         {
+				             t.printStackTrace();
+				         }
+					}
+				
+					
+				}
+				catch(Exception ec)
+				{
+					ec.printStackTrace();
+				}
+				}
+				
+				
+			}
+			else if(Transaction_Type.equals("Cash"))
+			{
+				if(name.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill customer name field");
+					customer_name_value.setBackground(Color.RED);
+				}
+				else if(phone_number.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill phone number field");
+					customer_phone_field.setBackground(Color.RED);
+				}
+			
+				else if(Transaction_Type.equals("Select Transaction"))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill Transaction Type field");
+					
+				}
+				else
+				{
+					customer_name_value.setText("");
+				    customer_phone_field.setText("");
+				    transtype.setSelectedIndex(0);
+				PaymentWindow window=new PaymentWindow(phone_number,name,Transaction_Type);
+				}
+			}
+			
+			
+			
+			else if(Transaction_Type.equals("Random"))
+			{
+				PaymentWindow window=new PaymentWindow(phone_number,name,Transaction_Type);
+				
+			}
+			else if(Transaction_Type.equals("Deposit"))
+			{
+				if(name.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill customer name field");
+					customer_name_value.setBackground(Color.RED);
+				}
+				else if(phone_number.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "Please fill phone number field");
+					customer_phone_field.setBackground(Color.RED);
+				}
+				else
+				{
+					try
+					{
+						Class.forName("oracle.jdbc.driver.OracleDriver");
+						Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+						PreparedStatement pst=con.prepareStatement("select contact_number,customer_name from customer_information");
+					    ResultSet rs=pst.executeQuery();
+					    int v=0;
+						while(rs.next())
+						{
+							if(rs.getInt(1)==(Integer.valueOf(phone_number)) && rs.getString(2).equals(name))
+							{
+								v=1;
+							}
+					
+							
+						}
+						if(v==0)
+						{
+							JOptionPane.showMessageDialog(null, "This Customer not Exists In System");
+						}
+						else
+						{
+							customer_name_value.setText("");
+						    customer_phone_field.setText("");
+						    transtype.setSelectedIndex(0);
+							DepositWindow window=new DepositWindow(phone_number,name,Transaction_Type);
+						}
+					}
+					catch(Exception ec)
+					{
+						ec.printStackTrace();
+					}
+					
+				}
+			}
+			
+		}
+		   
+	   });
+	   
+	   bottom_right.add(item_name_right);
+	   bottom_right.add(item_name_textbox);
+	   bottom_right.add(quantity_label);
+	   bottom_right.add(total_label);
+	   bottom_right.add(quantity_textbox);
+	   bottom_right.add(total_textbox);
+	   bottom_right.add(add_to_cart);
+	   bottom_right.add(process);
+	   bottom_right.add(showall);
+	   bottom_right.add(clear);
+	   bottom_right.add(cancel);
+	   
+	   
+	   
+	   
+	   
+	   bottom.add(bottom_right);
+	   bottom.add(bottom_left);
+	   bottom.add(maindetail);
+	   
+	   
+	   
+	   
+	   
+	  
+	   
+	   
+	   
+	   
+	   
+	  
+	 
+	   
+	   
+	   
+	  
+	   setBounds(150,5,1100,690);
+	   setTitle("Lamaichhane Inventory Management");
+	   setVisible(true);
+	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   setVisible(true);
+	   setLayout(null);
+	   add(top_info);
+	   add(navigation);
+	   add(status);
+	   add(tabledata);
+	   add(bottom);
+	   this.addWindowListener(new WindowListener(){
+
+		@Override
+		public void windowActivated(WindowEvent arg0)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent arg0) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent arg0)
+		{
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select * from sales_information_duplicate");
+				ResultSet rs=pst.executeQuery();
+				data.setModel(DbUtils.resultSetToTableModel(rs));
+				rs.close();
+				con.close();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+		   
+	   });
+   }
+   
+   public static void main(String args[])
+   {
+	   EmployeePanel panel=new EmployeePanel(null);
+   }
+
+
+ 
+  
+  
+ 
+}

@@ -1,0 +1,439 @@
+package employee;
+
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.PrinterJob;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+import net.proteanit.sql.DbUtils;
+
+public class PaymentWindow extends JFrame
+{
+	public String GenerateInvoiceNumber()
+	{
+		String id = null;
+		
+			
+			try
+			{
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+		    PreparedStatement pts=con.prepareStatement("select max(bill_no) from customer_transaction_table");
+			ResultSet ps=pts.executeQuery();
+			boolean decide=ps.next();
+			
+			if(decide)
+			{
+				id="E-0000001";
+			}
+			else
+			{
+				id=ps.getString(1);
+			   long val=Long.parseLong(id.substring(3));
+			   val++;
+			   id= "E-"+String.valueOf(String.format("%07d", val));
+		
+			
+			 
+			}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		  return id;
+		
+			
+		
+	}
+	   public PageFormat getPageFormat(PrinterJob pj)
+	    {
+	        PageFormat pf=pj.defaultPage();
+	        Paper paper=pf.getPaper();
+	        double middleHeight=8.0;
+	        double headerHeight=2.0;
+	        double footerHeight=2.0;
+	        double width=convert_CM_To_PPT(12);
+	        double height=convert_CM_To_PPT(headerHeight+middleHeight+footerHeight);
+	        paper.setSize(width,height);
+	        paper.setImageableArea(
+	        0,
+	        10,
+	        width,
+	        height-convert_CM_To_PPT(1)
+	        );
+	        pf.setOrientation(PageFormat.PORTRAIT);
+	        pf.setPaper(paper);
+	        return pf;
+	    }
+	       
+	        protected static double convert_CM_To_PPT(double dd)
+	    {
+	        return toPPT(dd*0.393600787);
+	    }
+	    protected static double toPPT(double inch)
+	    {
+	        return inch*72d;
+	    }
+   public PaymentWindow(String number,String name,String transactiontype)
+   {
+	   Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+	   JPanel bill_panel=new JPanel();
+	   Border loweredetched = BorderFactory.createEtchedBorder(EtchedBorder.LOWERED);
+	   bill_panel.setBounds(5,15,175,155);
+	   bill_panel.setBorder(loweredetched);
+	   bill_panel.setLayout(null);
+	   
+	   JLabel change=new JLabel("Change");
+	   change.setBounds(60,60,55,15);
+
+	   JTextField change_field=new JTextField("");
+	   change_field.setBounds(10,80,155,25);
+	   change_field.setBorder(loweredbevel);
+	   
+	   JLabel payment=new JLabel("Payment");
+	   payment.setBounds(60,10,55,15);
+	   JTextField payment_field=new JTextField("");
+	   payment_field.setBounds(10,30,155,25);
+	   payment_field.setBorder(loweredbevel);
+	   payment_field.addKeyListener(new KeyListener(){
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=con.prepareStatement("select sum(total) from sales_information_duplicate");
+				ResultSet rs=pst.executeQuery();
+				double d1=Double.parseDouble(payment_field.getText());
+				double d2 = 0;
+				while(rs.next())
+				{
+					d2=rs.getDouble(1);
+				}
+				double d3=d1-d2;
+				change_field.setText(String.valueOf(d3));
+				con.close();
+				rs.close();
+				
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		   
+	   });
+	
+	   JButton finish=new JButton("Finish");
+	   finish.setBounds(10,115,155,25);
+	   finish.addActionListener(new ActionListener()
+	   {
+
+		@Override
+		public void actionPerformed(ActionEvent e) 
+		{
+			
+			
+		
+			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			int x=0,z=0,f=0;
+			double sum=0;
+			String val=null;
+			ArrayList<Model> list=new ArrayList<Model>();
+			
+			if(transactiontype.equals("Cash"))
+			{
+				try
+				{
+				
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("insert into sales_information_real values(?,?,?,?,?,?)");
+					PreparedStatement pstx=con.prepareStatement("select * from sales_information_duplicate");
+				
+				
+					
+					
+					
+					ResultSet op=pstx.executeQuery();
+					while(op.next())
+					{
+						Model m=new Model();
+					m.setMydate(op.getDate(1));
+					m.setItem_code(op.getInt(2));
+					m.setItem_name(op.getString(3));
+					m.setPrice(op.getDouble(4));
+					m.setQuantity(op.getInt(5));
+				    m.setTotal(op.getDouble(6));
+				    sum+=op.getDouble(6);
+					list.add(m);
+					
+					}
+					
+					for(Model m:list)
+					{
+						pst.setDate(1, m.getMydate());
+						pst.setInt(2, m.getItem_code());
+						pst.setString(3, m.getItem_name());
+						pst.setDouble(4, m.getPrice());
+						pst.setInt(5, m.getQuantity());
+						pst.setDouble(6, m.getTotal());
+						x=pst.executeUpdate();
+					}
+					
+					for(Model m:list)
+					{
+						PreparedStatement pst2=con.prepareStatement("update item_info set stocks=stocks-"+m.getQuantity()+" where item_code=?");
+						pst2.setInt(1, m.getItem_code());
+						z=pst2.executeUpdate();
+					}
+					
+					val=GenerateInvoiceNumber();
+					
+					
+					
+					PreparedStatement pos=con.prepareStatement("insert into customer_transaction_table values(?,?,?,?,?,?,?)");
+					pos.setDate(1, sqlDate);
+					pos.setString(2,name);
+					pos.setInt(3,Integer.parseInt(number));
+					pos.setString(4, val);
+					pos.setString(5, "Cash in hand Vn:RV/"+val);
+					pos.setString(6, "Cash");
+					pos.setDouble(7, sum);
+					f=pos.executeUpdate();
+					
+					
+		          
+					
+					
+					
+					
+				
+					
+				
+					
+				
+				}
+				catch(Exception ez)
+				{
+					ez.printStackTrace();
+				}
+				if(x>0 && z>0 && f>0)
+				{
+				    JOptionPane.showMessageDialog(null,"Data are added Successfylly to the database");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+				}
+				
+				JOptionPane.showMessageDialog(null, "Thank You");
+				
+		         PrinterJob pj=PrinterJob.getPrinterJob();
+		         pj.setPrintable(new BillPrintable(number,name,transactiontype,val),getPageFormat(pj));
+		         try
+		         {
+		             pj.print();
+		         }
+		         catch(Exception t)
+		         {
+		             t.printStackTrace();
+		         }
+			}
+			else if(transactiontype.equals("Random"))
+			{
+				String namee = null,phonee=null;
+				if(name.equals(""))
+				{
+					namee="New  Member";
+				}
+				else
+				{
+					namee=name;
+				}
+				
+				if(number.equals(""))
+				{
+					phonee="000000";
+				}
+				else
+				{
+					phonee=number;
+				}
+				
+				try
+				{
+				
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("insert into sales_information_real values(?,?,?,?,?,?)");
+					PreparedStatement pstx=con.prepareStatement("select * from sales_information_duplicate");
+				
+				
+					
+					
+					
+					ResultSet op=pstx.executeQuery();
+					while(op.next())
+					{
+						Model m=new Model();
+					m.setMydate(op.getDate(1));
+					m.setItem_code(op.getInt(2));
+					m.setItem_name(op.getString(3));
+					m.setPrice(op.getDouble(4));
+					m.setQuantity(op.getInt(5));
+				    m.setTotal(op.getDouble(6));
+				    sum+=op.getDouble(6);
+					list.add(m);
+					
+					}
+					
+					for(Model m:list)
+					{
+						pst.setDate(1, m.getMydate());
+						pst.setInt(2, m.getItem_code());
+						pst.setString(3, m.getItem_name());
+						pst.setDouble(4, m.getPrice());
+						pst.setInt(5, m.getQuantity());
+						pst.setDouble(6, m.getTotal());
+						x=pst.executeUpdate();
+					}
+					
+					for(Model m:list)
+					{
+						PreparedStatement pst2=con.prepareStatement("update item_info set stocks=stocks-"+m.getQuantity()+" where item_code=?");
+						pst2.setInt(1, m.getItem_code());
+						z=pst2.executeUpdate();
+					}
+					
+					val=GenerateInvoiceNumber();
+					
+					
+					
+					PreparedStatement pos=con.prepareStatement("insert into customer_transaction_table values(?,?,?,?,?,?,?)");
+					pos.setDate(1, sqlDate);
+					pos.setString(2,namee);
+					pos.setInt(3,Integer.parseInt(phonee));
+					pos.setString(4, val);
+					pos.setString(5, "Cash in hand Vn:RV/"+val);
+					pos.setString(6, "Random");
+					pos.setDouble(7, sum);
+					f=pos.executeUpdate();
+					
+					
+		          
+					
+					
+					
+					
+				
+					
+				
+					
+				
+				}
+				catch(Exception ez)
+				{
+					ez.printStackTrace();
+				}
+				if(x>0 && z>0 && f>0)
+				{
+				    JOptionPane.showMessageDialog(null,"Data are added Successfylly to the database");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Sorry Problem Occured");
+				}
+				
+				JOptionPane.showMessageDialog(null, "Thank You");
+				
+		         PrinterJob pj=PrinterJob.getPrinterJob();
+		         pj.setPrintable(new BillPrintable(phonee,namee,transactiontype,val),getPageFormat(pj));
+		         try
+		         {
+		             pj.print();
+		         }
+		         catch(Exception t)
+		         {
+		             t.printStackTrace();
+		         }
+				
+			}
+			
+		
+			
+			
+			
+		
+		    dispose();
+			
+			
+		}
+		   
+	   });
+	   
+	   bill_panel.add(payment);
+	   bill_panel.add(payment_field);
+	   bill_panel.add(change);
+	   bill_panel.add(change_field);
+	   bill_panel.add(finish);
+	   
+	   
+	   
+	   
+	   
+	  
+	   this.setBounds(300,300,200,220);
+	   this.setVisible(true);
+	   this.setLayout(null);
+	   this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+	   this.setTitle("Bill");
+	   this.add(bill_panel);
+
+   }
+ 
+ 
+}

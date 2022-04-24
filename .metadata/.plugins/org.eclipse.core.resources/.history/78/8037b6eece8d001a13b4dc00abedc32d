@@ -1,0 +1,638 @@
+package admin;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Calendar;
+
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+import home.Login;
+import net.proteanit.sql.DbUtils;
+
+public class AccountPanel extends JFrame
+{
+	 String filepath=null;
+	public AccountPanel(String name)
+	{
+		 Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+		  Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+		  Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		  
+		  JPanel menu=new JPanel();
+		  menu.setBounds(5,5,200,80);
+		  menu.setBorder(raisedbevel);
+		  menu.setLayout(null);
+		  
+		  JLabel leftheader=new JLabel("MAIN MENU");
+		  Font font=new Font(Font.SANS_SERIF,Font.PLAIN,20);
+		  leftheader.setBounds(44,32,112,15);
+		  leftheader.setFont(font);
+		  menu.add(leftheader);
+		  
+		  
+		  JPanel left=new JPanel();
+		  left.setBounds(5,100,200,565);
+		  left.setBorder(raisedetched);
+		  left.setLayout(null);
+		  
+		  
+		  
+	 	  JButton inventory=new JButton("Inventory");
+	   	  inventory.setBounds(20,30,160,40);
+	   	  inventory.addActionListener(new ActionListener()
+	   	  {
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent arg0)
+	   		{
+	   			AdminPanel panel=new AdminPanel(name);
+	   			dispose();
+	   		}
+	   		  
+	   	  });
+	   	  JButton customer=new JButton("Customer");
+	   	  customer.setBounds(20, 90, 160, 40);
+	   	  customer.addActionListener(new ActionListener()
+	   	  {
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent e)
+	   		{
+	   			CustomerPanel panel=new CustomerPanel(name);
+	   			dispose();
+	   		}
+	   		  
+	   	  });
+	   	  JButton account=new JButton("Account");
+	   	  account.setBounds(20,150,160,40);
+	   	  account.addActionListener(new ActionListener()
+	   	  {
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent e) 
+	   		{
+	   			AccountPanel panel=new AccountPanel(name);
+	   			dispose();
+	   		}
+	   		  
+	   	  });
+	   	  JButton sales=new JButton("Sales");
+	   	  sales.setBounds(20,210,160,40);
+	   	  sales.addActionListener(new ActionListener(){
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent e)
+	   		{
+	   			SalesReport panel=new SalesReport(name);
+	   			
+	   		}
+	   		  
+	   	  });
+	   	  
+	   	  JButton customer_sales=new JButton("Customer Sales");
+	   	  customer_sales.setBounds(20,270,160,40);
+	   	  customer_sales.addActionListener(new ActionListener()
+	   	  {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				CustomerSalesPanel panel=new CustomerSalesPanel(name);
+			}
+	   		  
+	   	  });
+	   	  JButton changeuser=new JButton("Change User");
+	   	  changeuser.setBounds(20, 330, 160, 40);
+	   	  changeuser.addActionListener(new ActionListener()
+	   	  {
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent e) 
+	   		{
+	   			java.util.Calendar cal = Calendar.getInstance();
+				java.util.Date utilDate = new java.util.Date(); // your util date
+				cal.setTime(utilDate);    
+				java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+					pst.setDate(1, sqlDate);
+					pst.setString(2, name);
+					pst.setString(3, "Admin "+name+" logged out");
+					pst.executeUpdate();
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+	   			Login login=new Login();
+	   			dispose();
+	   			
+	   		}
+	   		  
+	   	  });
+	   	  JButton exit=new JButton("Exit");
+	   	  exit.setBounds(20,390,160,40);
+	   	  exit.addActionListener(new ActionListener()
+	   	  {
+
+	   		@Override
+	   		public void actionPerformed(ActionEvent e)
+	   		{
+	   			java.util.Calendar cal = Calendar.getInstance();
+				java.util.Date utilDate = new java.util.Date(); // your util date
+				cal.setTime(utilDate);    
+				java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+					pst.setDate(1, sqlDate);
+					pst.setString(2, name);
+					pst.setString(3, "Admin "+name+" logged out");
+					pst.executeUpdate();
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace();
+				}
+	   			System.exit(0);
+	   		}
+	   		  
+	   	  });
+		  JPanel pannel=new JPanel();
+		  pannel.setLayout(null);
+		  pannel.setBorder(raisedbevel);
+		  pannel.setBounds(20,460,160,80);
+		  
+		  JLabel Title=new JLabel("Logged In User Info");
+		  Title.setBounds(25,20,140,20);
+		  JLabel title_value=new JLabel();
+		  title_value.setBounds(50,40,60,20);
+		  title_value.setText(name);
+		  pannel.add(title_value);
+		  pannel.add(Title);
+		  
+		  left.add(pannel);
+		  left.add(inventory);
+		  left.add(customer);
+		  left.add(account);
+		  left.add(sales);
+		  left.add(changeuser);
+		  left.add(exit);
+		  left.add(customer_sales);
+		 
+		  
+		  
+		  
+		  
+		  JPanel top=new JPanel();
+		  top.setBounds(210,0,970,140);
+		  top.setBackground(Color.black);
+		  top.setBorder(loweredbevel);
+		  top.setLayout(null);
+		  
+		  JButton newitem = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//add item.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+		  newitem.setBounds(80,10,140,120);
+		  newitem.setText("New Item");
+		  newitem.setHorizontalTextPosition(AbstractButton.CENTER);
+		  newitem.setVerticalTextPosition(AbstractButton.BOTTOM);
+		  newitem.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				NewItem item=new NewItem(name);
+				dispose();
+				
+			}
+			  
+		  });
+		  
+		  JButton newcustomer = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new customer.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+		  newcustomer.setBounds(249,10,140,120);
+		  newcustomer.setText("New Customer");
+		  newcustomer.setHorizontalTextPosition(AbstractButton.CENTER);
+		  newcustomer.setVerticalTextPosition(AbstractButton.BOTTOM);
+		  newcustomer.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				NewCustomer customer=new NewCustomer(name);
+				dispose();
+			}
+			  
+		  });
+		
+		  JButton newemployee = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new employee.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+		  newemployee.setBounds(418,10,140,120);
+		  newemployee.setText("New Employee");
+		  newemployee.setHorizontalTextPosition(AbstractButton.CENTER);
+		  newemployee.setVerticalTextPosition(AbstractButton.BOTTOM);
+		  newemployee.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				NewEmployee emp=new NewEmployee(name);
+				dispose();
+			}
+			  
+		  });
+
+		  JButton logs = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+		  logs.setBounds(587,10,140,120);
+		  logs.setText("Logs");
+		  logs.setHorizontalTextPosition(AbstractButton.CENTER);
+		  logs.setVerticalTextPosition(AbstractButton.BOTTOM);
+		  logs.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Logs log=new Logs(name);
+				
+			}
+			  
+		  });
+		
+		  JButton help = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//help.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+		  help.setBounds(756,10,140,120);
+		  help.setText("Help");
+		  help.setHorizontalTextPosition(AbstractButton.CENTER);
+		  help.setVerticalTextPosition(AbstractButton.BOTTOM);
+		  help.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				Help help=new Help(name);
+				dispose();
+			}
+			  
+		  });
+
+		  top.add(newitem);
+		  top.add(newcustomer);
+		  top.add(newemployee);
+		  top.add(logs);
+		  top.add(help);
+		  
+		 
+		  
+		  
+		  
+		  JPanel middle=new JPanel();
+		  middle.setBounds(210,150,970,515);
+		  Border border = BorderFactory.createTitledBorder("User Account Table");
+		  middle.setBorder(border);
+		  middle.setLayout(null);
+		  
+		  JPanel middle_left=new JPanel();
+		  middle_left.setBounds(20,30,650,465);
+		 
+		  middle_left.setLayout(null);
+	         
+	      JTable jt=new JTable(); 
+	      JScrollPane pane=new JScrollPane(jt);
+	      pane.setBorder(loweredbevel);
+	      pane.setBounds(0,0,650,465);  
+	      middle_left.add(pane);
+		  
+		  JPanel middle_right=new JPanel();
+		  middle_right.setBounds(680,30,270,320);
+		  middle_right.setBorder(raisedbevel);
+		  middle_right.setLayout(null);
+		  
+		  JButton imagebutton=new JButton(new ImageIcon(((new ImageIcon("C:/Users/E15/Desktop/POS and inventory/image/download.jpg")).getImage()).getScaledInstance(190, 190, java.awt.Image.SCALE_SMOOTH)));
+		  imagebutton.setBounds(40,10,190,190);
+		  imagebutton.setBackground(Color.RED);
+		  
+		  JLabel account_name=new JLabel("Account Name:");
+		  account_name.setBounds(40,205,90,15);
+		  JTextField accountname_textbox=new JTextField();
+		  accountname_textbox.setBounds(40,225,190,25);
+		  accountname_textbox.setBorder(loweredbevel);
+		  JLabel position=new JLabel("Position:");
+		  position.setBounds(40,255,90,15);
+		  String value[]={"Select Any","Admin","Cashier"};
+		  JComboBox position_textbox=new JComboBox(value);
+		  position_textbox.setBounds(40,275,190,25);
+		  position_textbox.setBorder(loweredbevel);
+		  
+		  middle_right.add(position_textbox);
+		  middle_right.add(position);
+		  middle_right.add(accountname_textbox);
+		  middle_right.add(account_name);
+		  middle_right.add(imagebutton);
+		  
+		  middle.add(middle_right);
+		  middle.add(middle_left);
+		  
+		  
+		  JButton delete=new JButton("Delete");
+		  delete.setBounds(680,360,70,25);
+		  delete.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("delete from employee_information where account_name=? and position=?");
+					pst.setString(1, accountname_textbox.getText());
+					pst.setString(2, position_textbox.getSelectedItem().toString());
+					int z=pst.executeUpdate();
+					if(z>0)
+					{
+						JOptionPane.showMessageDialog(null, "Successfully Deleted");
+						accountname_textbox.setText("");
+						position_textbox.setSelectedItem(0);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Sorry Problem Ocurred");
+					}
+				}
+				catch(Exception eo)
+				{
+					eo.printStackTrace();
+				}
+				
+			}
+			  
+		  });
+		  JButton changeimage=new JButton("Change Image");
+		  changeimage.setBounds(755,360,115,25);
+		  changeimage.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				 JFileChooser fc=new JFileChooser();    
+				 int i=fc.showOpenDialog(null); 
+				 File f=fc.getSelectedFile();    
+			        filepath = f.getPath(); 
+                    ImageIcon con=new ImageIcon(new ImageIcon(filepath).getImage().getScaledInstance(190, 190, java.awt.Image.SCALE_SMOOTH));
+			        imagebutton.setIcon(con);
+				
+			}
+			  
+		  });
+		  JButton modify=new JButton("Modify");
+		  modify.setBounds(875,360,75,25);
+		  modify.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("update employee_information set account_name=?,position=?,image=? where account_name=? and position=?");
+					pst.setString(1, accountname_textbox.getText());
+					pst.setString(2, position_textbox.getSelectedItem().toString());
+				
+					
+					FileInputStream fin=new FileInputStream(filepath);  
+					pst.setBinaryStream(3,fin,fin.available()); 
+					pst.setString(4, accountname_textbox.getText());
+					pst.setString(5, position_textbox.getSelectedItem().toString());
+					int z=pst.executeUpdate();
+					if(z>0)
+					{
+						JOptionPane.showMessageDialog(null, "Successfully Updated");
+						accountname_textbox.setText("");
+						position_textbox.setSelectedItem(0);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null,"Sorry Problem Ocurred");
+					}
+				}
+				catch(Exception eo)
+				{
+					eo.printStackTrace();
+				}
+			}
+			  
+		  });
+		  
+		  JButton showall=new JButton("Show All");
+		  showall.setBounds(755,395,115,25);
+		  showall.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("select * from employee_information order by account_name ASC");
+					ResultSet rs=pst.executeQuery();
+					jt.setModel(DbUtils.resultSetToTableModel(rs));
+					
+					con.close();
+					rs.close();
+				}
+				catch(Exception eu)
+				{
+					eu.printStackTrace();
+				}
+			}
+			  
+		  });
+		  
+		  JTextField field=new JTextField();
+		  field.setBounds(700,470,150,25);
+		  field.setText("Enter Account name...");
+		  
+		  JButton button=new JButton("Search");
+		  button.setBounds(860,470,80,25);
+		  button.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("select * from employee_information  where account_name=? ");
+					pst.setString(1, field.getText());
+					ResultSet rs=pst.executeQuery();
+					jt.setModel(DbUtils.resultSetToTableModel(rs));
+					
+					con.close();
+					rs.close();
+				}
+				catch(Exception eu)
+				{
+					eu.printStackTrace();
+				}
+				
+			}
+			  
+		  });
+		  JButton clear=new JButton("Clear");
+		  clear.setBounds(680,395,70,25);
+		  clear.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+			   accountname_textbox.setText("");
+			   position_textbox.setSelectedIndex(0);
+			   imagebutton.setIcon(null);
+			   
+				
+			}
+			  
+		  });
+		  JButton cancel=new JButton("Cancel");
+		  cancel.setBounds(875,395,75,25);
+		  cancel.addActionListener(new ActionListener()
+		  {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+				
+			}
+			  
+		  });
+		  
+		  middle.add(delete);
+		  middle.add(modify);
+		  middle.add(changeimage);
+		  middle.add(showall);
+		  middle.add(clear);
+		  middle.add(cancel);
+		  middle.add(field);
+		  middle.add(button);
+		  
+		
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+		  setBounds(20,20,1192,700);
+		  setTitle("Lamichhane Inventory Management");
+		  setVisible(true);
+		  setDefaultCloseOperation(EXIT_ON_CLOSE);
+		  setVisible(true);
+		  setLayout(null);
+		  setResizable(false);
+		  add(menu);
+		  add(left);
+		  add(top);
+		  add(middle);
+		  this.addWindowListener(new WindowListener(){
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowClosed(WindowEvent e) {
+				// TODO Auto-generated method stub
+			
+				
+			}
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowIconified(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void windowOpened(WindowEvent e) {
+				// TODO Auto-generated method stub
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("select * from employee_information order by account_name ASC");
+					ResultSet rs=pst.executeQuery();
+					jt.setModel(DbUtils.resultSetToTableModel(rs));
+					
+					con.close();
+					rs.close();
+				}
+				catch(Exception eu)
+				{
+					eu.printStackTrace();
+				}
+				
+			}
+			  
+		  });
+	}
+	
+
+
+}

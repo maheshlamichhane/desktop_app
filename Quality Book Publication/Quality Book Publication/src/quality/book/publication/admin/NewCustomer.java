@@ -1,0 +1,906 @@
+package quality.book.publication.admin;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.util.Calendar;
+import java.awt.event.WindowListener;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+import quality.book.publication.home.Login;
+
+public class NewCustomer extends JFrame
+{
+    public NewCustomer(String name)
+    {
+    	 Border raisedetched = BorderFactory.createEtchedBorder(EtchedBorder.RAISED);
+   	  Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+   	  Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+   	  
+   	  JPanel menu=new JPanel();
+   	  menu.setBounds(5,5,200,80);
+   	  menu.setBorder(raisedbevel);
+   	  menu.setLayout(null);
+   	  
+   	  JLabel leftheader=new JLabel("MAIN MENU");
+   	  Font font=new Font(Font.SANS_SERIF,Font.PLAIN,20);
+   	  leftheader.setBounds(44,32,112,15);
+   	  leftheader.setFont(font);
+   	  menu.add(leftheader);
+   	  
+   	  
+   	  JPanel left=new JPanel();
+   	  left.setBounds(5,100,200,565);
+   	  left.setBorder(raisedetched);
+   	  left.setLayout(null);
+   	  
+   	  
+   	  
+	  JButton inventory=new JButton("Inventory");
+   	  inventory.setBounds(20,30,160,40);
+   	  inventory.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0)
+   		{
+   			AdminPanel panel=new AdminPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton customer=new JButton("Customer");
+   	  customer.setBounds(20, 90, 160, 40);
+   	  customer.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			CustomerPanel panel=new CustomerPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton account=new JButton("Account");
+   	  account.setBounds(20,150,160,40);
+   	  account.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e) 
+   		{
+   			AccountPanel panel=new AccountPanel(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	  JButton sales=new JButton("Sales");
+   	  sales.setBounds(20,210,160,40);
+   	  sales.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			SalesReport panel=new SalesReport(name);
+   			
+   		}
+   		  
+   	  });
+   	  
+   	  JButton customer_sales=new JButton("Customer Sales");
+   	  customer_sales.setBounds(20,270,160,40);
+   	  customer_sales.addActionListener(new ActionListener()
+   	  {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			CustomerSalesPanel panel=new CustomerSalesPanel(name);
+		}
+   		  
+   	  });
+   	  JButton changeuser=new JButton("Change User");
+   	  changeuser.setBounds(20, 330, 160, 40);
+   	  changeuser.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e) 
+   		{
+   			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Admin "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+   			Login login=new Login();
+   			dispose();
+   			
+   		}
+   		  
+   	  });
+   	  JButton exit=new JButton("Exit");
+   	  exit.setBounds(20,390,160,40);
+   	  exit.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent e)
+   		{
+   			java.util.Calendar cal = Calendar.getInstance();
+			java.util.Date utilDate = new java.util.Date(); // your util date
+			cal.setTime(utilDate);    
+			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
+			try
+			{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+				PreparedStatement pst=conn.prepareStatement("insert into system_log_data values(?,?,?)");
+				pst.setDate(1, sqlDate);
+				pst.setString(2, name);
+				pst.setString(3, "Admin "+name+" logged out");
+				pst.executeUpdate();
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+   			System.exit(0);
+   		}
+   		  
+   	  });
+   	 JPanel pannel=new JPanel();
+	  pannel.setLayout(null);
+	  pannel.setBorder(raisedbevel);
+	  pannel.setBounds(20,460,160,80);
+	  
+	  JLabel Title=new JLabel("Logged In User Info");
+	  Title.setBounds(25,20,140,20);
+	  JLabel title_value=new JLabel();
+	  title_value.setBounds(50,40,60,20);
+	  title_value.setText(name);
+	  pannel.add(title_value);
+	  pannel.add(Title);
+	  
+	  left.add(pannel);
+   	  
+   	  left.add(inventory);
+   	  left.add(customer);
+   	  left.add(account);
+   	  left.add(sales);
+   	  left.add(changeuser);
+   	  left.add(exit);
+   	  left.add(customer_sales);
+   	 
+   	  
+   	  
+   	  
+   	  
+   	  JPanel top=new JPanel();
+   	  top.setBounds(210,0,970,140);
+   	  top.setBackground(Color.black);
+   	  top.setBorder(loweredbevel);
+   	  top.setLayout(null);
+   	  
+   	  JButton newitem = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//add item.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newitem.setBounds(80,10,140,120);
+   	  newitem.setText("New Item");
+   	  newitem.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newitem.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newitem.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewItem item=new NewItem(name);
+   			dispose();
+   			
+   		}
+   		  
+   	  });
+   	  
+   	  JButton newcustomer = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new customer.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newcustomer.setBounds(249,10,140,120);
+   	  newcustomer.setText("New Customer");
+   	  newcustomer.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newcustomer.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newcustomer.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewCustomer customer=new NewCustomer(name);
+   			dispose();
+   		}
+   		  
+   	  });
+   	
+   	  JButton newemployee = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//new employee.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  newemployee.setBounds(418,10,140,120);
+   	  newemployee.setText("New Employee");
+   	  newemployee.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  newemployee.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  newemployee.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			NewEmployee emp=new NewEmployee(name);
+   			dispose();
+   		}
+   		  
+   	  });
+
+   	  JButton logs = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//logs.jpg")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  logs.setBounds(587,10,140,120);
+   	  logs.setText("Logs");
+   	  logs.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  logs.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  logs.addActionListener(new ActionListener()
+   	  {
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			Logs log=new Logs(name);
+   			
+   		}
+   		  
+   	  });
+   	
+   	  JButton help = new JButton(new ImageIcon(((new ImageIcon("C://Users//Mahesh Lamichhane//Desktop//desktop app//Pos and Inventory System//image//logo//help.png")).getImage()).getScaledInstance(140, 90, java.awt.Image.SCALE_SMOOTH)));
+   	  help.setBounds(756,10,140,120);
+   	  help.setText("Help");
+   	  help.setHorizontalTextPosition(AbstractButton.CENTER);
+   	  help.setVerticalTextPosition(AbstractButton.BOTTOM);
+   	  help.addActionListener(new ActionListener(){
+
+   		@Override
+   		public void actionPerformed(ActionEvent arg0) 
+   		{
+   			Help help=new Help(name);
+   			dispose();
+   		}
+   		  
+   	  });
+
+   	  top.add(newitem);
+   	  top.add(newcustomer);
+   	  top.add(newemployee);
+   	  top.add(logs);
+   	  top.add(help);
+   	  
+   	  
+   	  
+   	  JPanel middle=new JPanel();
+   	  middle.setBounds(210,150,970,515);
+   	  middle.setBorder(raisedbevel);
+   	  middle.setLayout(null);
+   	  
+   	  
+   	  JLabel cust=new JLabel("Customer Information");
+	  Font fon=new Font(Font.SERIF,Font.BOLD,35);
+	  cust.setFont(fon);
+	  cust.setBounds(340,30,340,30);
+	  
+	  JLabel customername=new JLabel("Customer Name:");
+	  customername.setBounds(340,99,100,20);
+	  JTextField customername_textbox=new JTextField();
+	  customername_textbox.setBounds(440,95,235,30);
+	  customername_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			customername_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  customername_textbox.setBorder(loweredbevel);
+	  JLabel gender=new JLabel("Gender:");
+	  gender.setBounds(360,135,100,20);
+	  ButtonGroup group=new ButtonGroup();
+	  JRadioButton male=new JRadioButton("Male");
+	  male.setActionCommand("Male");
+	  male.setBounds(440,135,100,20);
+	  JRadioButton female=new JRadioButton("Female");
+	  female.setActionCommand("Female");
+	  female.setBounds(550,135,100,20);
+	  group.add(male);
+	  group.add(female);
+	  
+	  JLabel address=new JLabel("Address:");
+	  address.setBounds(360,169,100,20);
+	  JTextField address_textbox=new JTextField();
+	  address_textbox.setBounds(440,165,235,30);
+	  address_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			address_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  address_textbox.setBorder(loweredbevel);
+	  JLabel city=new JLabel("City:");
+	  city.setBounds(370,210,100,20);
+	  JTextField city_textbox=new JTextField();
+	  city_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			city_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  city_textbox.setBounds(440,205,235,30);
+	  city_textbox.setBorder(loweredbevel);
+	  JLabel province=new JLabel("Province:");
+	  province.setBounds(360,249,100,20);
+	  JTextField province_textbox=new JTextField();
+	  province_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			province_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  province_textbox.setBounds(440,245,235,30);
+	  province_textbox.setBorder(loweredbevel);
+	  top.setBorder(loweredbevel);
+	  JLabel zipcode=new JLabel("Zip Code:");
+	  zipcode.setBounds(360,294,100,20);
+	  JTextField zipcode_textbox=new JTextField();
+	  zipcode_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			zipcode_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  zipcode_textbox.setBounds(440,290,235,30);
+	  zipcode_textbox.setBorder(loweredbevel);
+	  
+	  JLabel contactnumber=new JLabel("Contact Number:");
+	  contactnumber.setBounds(340,334,100,20);
+	  JTextField contactnumber_textbox=new JTextField();
+	  contactnumber_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+			contactnumber_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  contactnumber_textbox.setBounds(440,330,235,30);
+	  contactnumber_textbox.setBorder(loweredbevel);
+	  JLabel emailaddress=new JLabel("Email Address:");
+	  emailaddress.setBounds(340,374,100,20);
+	  JTextField emailaddress_textbox=new JTextField();
+	  emailaddress_textbox.addFocusListener(new FocusListener()
+	  {
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			// TODO Auto-generated method stub
+		     emailaddress_textbox.setBackground(Color.WHITE);
+			
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  emailaddress_textbox.setBounds(440,370,235,30);
+	  emailaddress_textbox.setBorder(loweredbevel);
+	  
+	  JButton clear=new JButton("Clear");
+	  clear.setBounds(400,430,80,30);
+	  clear.addActionListener(new ActionListener()
+	  {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) 
+		{
+			customername_textbox.setText("");
+			male.setSelected(false);
+			female.setSelected(false);
+			address_textbox.setText("");
+			city_textbox.setText("");
+			province_textbox.setText("");
+			zipcode_textbox.setText("");
+			contactnumber_textbox.setText("");
+		    emailaddress_textbox.setText("");
+		}
+		  
+	  });
+	  JButton save=new JButton("Save");
+	  save.setBounds(510,430,80,30);
+	  save.addActionListener(new ActionListener()
+	  {
+
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			
+			if(customername_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Customer Name Field can't be empty");
+				customername_textbox.setBackground(Color.RED);
+			}
+			else if(!male.isSelected()&& !female.isSelected())
+			{
+				JOptionPane.showMessageDialog(null, "Gender Field must be selected");
+			}
+			else if(address_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Address Field can't be empty");
+				address_textbox.setBackground(Color.RED);
+			}
+			else if(city_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "City Field can't be empty");
+				city_textbox.setBackground(Color.red);
+			}
+			else if(province_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Province Field can't be empty");
+				province_textbox.setBackground(Color.RED);
+			}
+			else if(zipcode_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Zipcode Field can't be empty");
+				zipcode_textbox.setBackground(Color.RED);
+			}
+			else if(contactnumber_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Contact Number Field can't be empty");
+				contactnumber_textbox.setBackground(Color.RED);
+			}
+			else if(emailaddress_textbox.getText().equals(""))
+			{
+				JOptionPane.showMessageDialog(null, "Email Address Field can't be empty");
+				emailaddress_textbox.setBackground(Color.RED);
+			}
+			else
+			{
+				if(customername_textbox.getText().length()>30)
+				{
+					JOptionPane.showMessageDialog(null, "Customer Name must have maximum 30 characters");
+					customername_textbox.setBackground(Color.yellow);
+				}
+				else if(address_textbox.getText().length()>30)
+				{
+					JOptionPane.showMessageDialog(null, "Address must have maximum 30 characters");
+					address_textbox.setBackground(Color.yellow);
+				}
+				else if(city_textbox.getText().toString().length()>20)
+				{
+					JOptionPane.showMessageDialog(null, "City must have maximum 20 characters");
+					city_textbox.setBackground(Color.yellow);
+				}
+				else if(province_textbox.getText().length()>15)
+				{
+					JOptionPane.showMessageDialog(null, "Privinance  must have maximum 15 characters");
+					province_textbox.setBackground(Color.yellow);
+				}
+				else if(zipcode_textbox.getText().length()>6)
+				{
+					JOptionPane.showMessageDialog(null, "Zip code  must have maximum 6 characters");
+					zipcode_textbox.setBackground(Color.yellow);
+				}
+				else if(contactnumber_textbox.getText().length()>10)
+				{
+					JOptionPane.showMessageDialog(null, "Stock Field  must have maximum 10 characters");
+					contactnumber_textbox.setBackground(Color.yellow);
+				}
+				else if(emailaddress_textbox.getText().length()>30)
+				{
+					JOptionPane.showMessageDialog(null, "Stock Field  must have maximum 30 characters");
+					emailaddress_textbox.setBackground(Color.yellow);
+				}
+				else
+				{
+				int z=0;
+				String customer_name=customername_textbox.getText();
+				String gender=group.getSelection().getActionCommand();
+				String address=address_textbox.getText();
+				String city=city_textbox.getText();
+				String province=province_textbox.getText();
+				int zipcode=Integer.parseInt(zipcode_textbox.getText());
+				int contactnumber=Integer.parseInt(contactnumber_textbox.getText());
+				String email=emailaddress_textbox.getText();
+				
+				try
+				{
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:orcl","sys as sysdba","mahesh");
+					PreparedStatement pst=con.prepareStatement("insert into customer_information values(?,?,?,?,?,?,?,?)");
+					pst.setString(1, customer_name);
+					pst.setString(2, gender);
+					pst.setString(3, address);
+					pst.setString(4, city);
+					pst.setString(5, province);
+					pst.setInt(6, zipcode);
+					pst.setInt(7, contactnumber);
+					pst.setString(8, email);
+					z=pst.executeUpdate();
+					if(z>0)
+						{
+							JOptionPane.showMessageDialog(null, "Data are successfully inserted to the database");
+							customername_textbox.setText("");
+							male.setSelected(false);
+							female.setSelected(false);
+							address_textbox.setText("");
+							city_textbox.setText("");
+							province_textbox.setText("");
+							zipcode_textbox.setText("");
+							contactnumber_textbox.setText("");
+						    emailaddress_textbox.setText("");
+			            }
+					else
+						{
+							JOptionPane.showMessageDialog(null, "Sorry Proble Occured");
+						}
+				}
+				catch(Exception eo)
+				{
+					eo.printStackTrace();
+				}
+			}
+		}
+		}
+			
+		  
+	  });
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  middle.add(cust);
+	  middle.add(customername);
+	  middle.add(customername_textbox);
+	  middle.add(gender);
+	  middle.add(male);
+	  middle.add(female);
+	  middle.add(address);
+	  middle.add(address_textbox);
+	  middle.add(city);
+	  middle.add(city_textbox);
+	  middle.add(province);
+	  middle.add(province_textbox);
+	  middle.add(zipcode);
+	  middle.add(zipcode_textbox);
+	  middle.add(contactnumber);
+	  middle.add(contactnumber_textbox);
+	  middle.add(emailaddress);
+	  middle.add(emailaddress_textbox);
+   	  middle.add(clear);
+   	  middle.add(save);
+   	  
+   	  customername_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       address_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  }); 
+   	  
+   	  address_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       city_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+   	  city_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       province_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+   	  
+   	  province_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       zipcode_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+   	  zipcode_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       contactnumber_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+   	  contactnumber_textbox.addKeyListener(new KeyListener()
+	  {
+
+		@Override
+		public void keyPressed(KeyEvent e) 
+		{
+			 int key = e.getKeyCode();
+		     if (key == KeyEvent.VK_ENTER) 
+		     {
+		       emailaddress_textbox.requestFocus();
+		     }
+			
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+   
+   	  
+   	  setBounds(20,20,1192,700);
+	  setTitle("Lamichhane Inventory Management");
+	  setVisible(true);
+	  setDefaultCloseOperation(EXIT_ON_CLOSE);
+	  setVisible(true);
+	  setLayout(null);
+	  setResizable(false);
+	  this.addWindowListener(new WindowListener(){
+
+		@Override
+		public void windowActivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowClosed(WindowEvent e) {
+			
+			
+		}
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeactivated(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowDeiconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowIconified(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void windowOpened(WindowEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		  
+	  });
+	  add(menu);
+	  add(left);
+	  add(top);
+	  add(middle);
+    }
+    
+
+	
+}
